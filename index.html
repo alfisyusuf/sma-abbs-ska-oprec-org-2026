@@ -273,18 +273,31 @@
 
   // Autocomplete
   const inpNama = document.getElementById('nama'), listEl = document.getElementById('autocomplete-list');
+  
   inpNama.oninput = function() {
-    const v = this.value.toLowerCase(); listEl.innerHTML = '';
+    const v = this.value.toLowerCase(); 
+    listEl.innerHTML = '';
+    
+    // RESET variabel kelas dan sembunyikan info sukses jika siswa mengetik ulang
+    currentKelas = ''; 
+    document.getElementById('infoSiswa').classList.add('hidden');
+    
     if(!v) { listEl.style.display='none'; return; }
+    
+    // Filter saran nama (maksimal tampil 5)
     const m = daftarSiswa.filter(s => s.nama.toLowerCase().includes(v)).slice(0, 5);
     if(!m.length) { listEl.style.display='none'; return; }
     
     listEl.style.display='block';
     m.forEach(s => {
-      const d = document.createElement('div'); d.className = 'autocomplete-item';
+      const d = document.createElement('div'); 
+      d.className = 'autocomplete-item';
       d.innerHTML = `<span class="item-name">${s.nama}</span><span class="item-meta">${s.kelas}</span>`;
-      d.onmousedown = (e) => {
-        e.preventDefault(); inpNama.value = s.nama; currentKelas = s.kelas;
+      
+      // Gunakan onclick agar kompatibel 100% di HP maupun Laptop
+      d.onclick = () => {
+        inpNama.value = s.nama; 
+        currentKelas = s.kelas; // Simpan data kelas
         document.getElementById('infoSiswaText').textContent = `Ditemukan: ${s.kelas} - ${s.nis||''}`;
         document.getElementById('infoSiswa').classList.remove('hidden');
         listEl.style.display='none';
@@ -292,8 +305,11 @@
       listEl.appendChild(d);
     });
   };
-  document.onclick = (e) => { if(!e.target.closest('.autocomplete-wrap')) listEl.style.display='none'; }
 
+  // Sembunyikan dropdown jika user mengeklik di luar area input
+  document.onclick = (e) => { 
+    if(!e.target.closest('.autocomplete-wrap')) listEl.style.display='none'; 
+  };
   document.getElementById('namaOrtu').oninput = function() { this.value = this.value.replace(/\b\w/g, c => c.toUpperCase()); };
   function setupWA(id, errId) {
     const el = document.getElementById(id), err = document.getElementById(errId);
