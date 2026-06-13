@@ -306,10 +306,6 @@
     <span class="badge-tahun">SMA ABBS Surakarta</span>
   </div>
 
-  <div class="container" style="padding-bottom: 0; padding-top: 0; max-width: 600px;">
-    <div id="timelineBanner"></div>
-  </div>
-
   <div class="container">
     <div id="closedState">
       <div class="closed-icon">🔒</div>
@@ -319,6 +315,8 @@
   </div>
 
   <div class="container" id="mainForm">
+
+    <div id="timelineBanner" style="margin: 0 0 16px 0; border-radius: var(--radius); padding: 12px 16px; font-size: 12px; font-weight: 600; display: none; align-items: flex-start; gap: 10px;"></div>
 
     <div class="card">
       <div class="section-label"><span class="section-label-bar"></span>Data Diri Siswa</div>
@@ -436,7 +434,8 @@
   function checkTimeline(config) {
     const now    = new Date();
     const banner = document.getElementById('timelineBanner');
-    const fmt    = d => d ? new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short'}) : '?';
+    // Format tanggal: 14 Jul 2026
+    const fmt    = d => d ? new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short', year:'numeric'}) : '?';
 
     const startX   = config.BatasAwalX   ? new Date(config.BatasAwalX)   : null;
     const endX     = config.BatasAkhirX  ? new Date(config.BatasAkhirX)  : null;
@@ -451,16 +450,38 @@
     if (xActive || xiActive) {
       formEnabled = true;
       banner.className = 'info';
-      banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#3B82F6"/><path d="M8 4v4l2.5 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Pendaftaran dibuka${xActive && xiActive ? '' : xActive ? ' untuk Kelas X' : ' untuk Kelas XI'}`;
+      
+      // Logika dinamis: Tampilkan kelas yang sedang aktif beserta batas akhirnya masing-masing
+      let infoKelas = [];
+      if (xActive)  infoKelas.push(`Kelas X (s.d. ${fmt(endX)})`);
+      if (xiActive) infoKelas.push(`Kelas XI (s.d. ${fmt(endXI)})`);
+
+      banner.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" style="flex-shrink:0; margin-top:2px;">
+          <circle cx="8" cy="8" r="8" fill="#3B82F6"/>
+          <path d="M8 4v4l2.5 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span style="line-height:1.5">Pendaftaran saat ini dibuka untuk <strong>${infoKelas.join(' dan ')}</strong>.</span>
+      `;
+      
       document.getElementById('closedState').style.display = 'none';
-      document.getElementById('mainForm').style.display = '';
+      document.getElementById('mainForm').style.display = 'block';
     } else {
       formEnabled = false;
       document.getElementById('btnSubmit').disabled = true;
-      banner.className = 'error';
-      banner.innerHTML = `🔒 Pendaftaran ditutup.`;
-      closedUI('Pendaftaran Ditutup', 'Periode pendaftaran organisasi saat ini tidak aktif.');
+      
+      const allFuture = [startX, startXI].filter(Boolean).every(d => d > now);
+      
+      if (allFuture) {
+        const nearestStart = [startX, startXI].filter(Boolean).sort((a,b)=>a-b)[0];
+        banner.className = 'warn';
+        banner.innerHTML = `⏳ Pendaftaran belum dimulai. Dibuka pada ${fmt(nearestStart)}.`;
+        closedUI('Pendaftaran Belum Dibuka', `Pendaftaran akan dibuka mulai ${fmt(nearestStart)}. Pantau terus info dari sekolah.`);
+      } else {
+        banner.className = 'error';
+        banner.innerHTML = `🔒 Periode pendaftaran telah ditutup.`;
+        closedUI('Pendaftaran Ditutup', 'Periode pendaftaran organisasi saat ini sudah berakhir atau tidak aktif.');
+      }
     }
   }
 
