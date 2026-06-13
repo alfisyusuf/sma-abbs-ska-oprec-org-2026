@@ -6,18 +6,23 @@
   <title>Dashboard Pengurus — SMA ABBS Surakarta</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* CSS Sama seperti file admin.html sebelumnya, dengan tambahan styling Tab dan Select */
-    :root { --maroon: #7B1A1A; --maroon-mid: #A52020; --bg: #F4EFEE; --card: #FFFFFF; --text: #1C1C1E; --muted: #6B7280; --border: #E5D8D8; --radius: 16px; }
+    :root { --maroon: #7B1A1A; --maroon-mid: #A52020; --maroon-soft: #FBEAEA; --bg: #F4EFEE; --card: #FFFFFF; --text: #1C1C1E; --muted: #6B7280; --border: #E5D8D8; --radius: 16px; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     
     #loginScreen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: var(--maroon); }
     .login-box { background: white; border-radius: 24px; padding: 36px 28px; width: 100%; max-width: 380px; text-align:center; }
     .login-box input { width: 100%; padding: 14px; border: 1.5px solid var(--border); border-radius: 12px; margin: 16px 0; outline: none; }
-    .btn-login { width: 100%; padding: 14px; background: var(--maroon); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+    .btn-login { width: 100%; padding: 14px; background: var(--maroon); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
     
     #dashboard { display: none; }
     .dash-header { background: var(--maroon); padding: 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
+    
+    .btn-refresh { padding: 8px 16px; border-radius: 8px; border: none; background: rgba(255,255,255,0.2); color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: inherit; transition: 0.2s; }
+    .btn-refresh:hover { background: rgba(255,255,255,0.3); }
+    .btn-refresh:disabled { opacity: 0.6; cursor: not-allowed; }
+
     .dash-body { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
     
     .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: white; padding: 6px; border-radius: 12px; border: 1px solid var(--border); width: max-content; }
@@ -32,6 +37,10 @@
     th { background: #F9F3F3; color: var(--muted); font-size: 11px; text-transform: uppercase; padding: 12px 16px; text-align: left; }
     td { padding: 12px 16px; border-bottom: 1px solid #F5EEEE; }
     .badge-org { padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; background: #F3F4F6; }
+
+    /* Animasi Loading Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.8s linear infinite; }
   </style>
 </head>
 <body>
@@ -39,15 +48,20 @@
   <div id="loginScreen">
     <div class="login-box">
       <h2 style="color:var(--maroon)">Akses Pengurus</h2>
-      <input type="password" id="adminPass" placeholder="Kata Sandi">
-      <button class="btn-login" onclick="login()">Masuk Dashboard</button>
+      <input type="password" id="adminPass" placeholder="Kata Sandi" onkeypress="if(event.key === 'Enter') login()">
+      <button id="btnLogin" class="btn-login" onclick="login()">Masuk Dashboard</button>
     </div>
   </div>
 
   <div id="dashboard">
     <div class="dash-header">
       <div><h2>Rekapitulasi</h2><span style="font-size:12px;opacity:0.8">SMA ABBS Surakarta</span></div>
-      <div><button onclick="fetchData()" style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Refresh</button></div>
+      <div>
+        <button id="btnRefresh" class="btn-refresh" onclick="fetchData(true)">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 7A6 6 0 1 0 3.5 2.5"/><path d="M1 3v3.5H4.5" stroke-linejoin="round"/></svg>
+          <span id="txtRefresh">Refresh</span>
+        </button>
+      </div>
     </div>
 
     <div class="dash-body">
@@ -60,7 +74,7 @@
         <input type="text" id="searchInp" placeholder="Cari nama..." oninput="renderTable()" style="flex:1; max-width:250px;">
         <select id="orgFilter" onchange="renderTable()">
           <option value="">Semua Organisasi</option>
-          </select>
+        </select>
         <p style="font-size: 13px; color: var(--muted); margin-left: auto; align-self: center;">Total Terfilter: <strong id="totalCount">0</strong></p>
       </div>
 
@@ -79,13 +93,37 @@
   const API_URL = 'https://script.google.com/macros/s/AKfycbzY99nHyZhORxWNEYGr5q_WsYdkXcFmYFpKY0Txzhcz5_BHKSvUFIWr_7Hm7A_KBxZw/exec'; 
   let dataKelasX = [], dataKelasXI = [], activeTab = 'X', currentPass = '';
 
-  function login() { currentPass = document.getElementById('adminPass').value; fetchData(); }
+  function login() { 
+    currentPass = document.getElementById('adminPass').value.trim(); 
+    if(!currentPass) return alert("Kata sandi tidak boleh kosong!");
+    fetchData(false); 
+  }
 
-  async function fetchData() {
+  // Tambahkan parameter isRefresh untuk membedakan asal tombol (Login vs Refresh)
+  async function fetchData(isRefresh = false) {
+    const btn = isRefresh ? document.getElementById('btnRefresh') : document.getElementById('btnLogin');
+    const originalContent = btn.innerHTML; // Simpan tampilan tombol asli
+    
+    // Aktifkan mode Loading UI
+    btn.disabled = true;
+    btn.innerHTML = `
+      <svg class="spin" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 8a6 6 0 1 0 2-4.47" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>${isRefresh ? 'Menyegarkan...' : 'Memverifikasi...'}</span>
+    `;
+
     try {
-      const res = await fetch(`${API_URL}?action=getAdmin&password=${currentPass}`);
+      const res = await fetch(`${API_URL}?action=getAdmin&password=${encodeURIComponent(currentPass)}`);
       const data = await res.json();
-      if(data.error) return alert(data.error);
+      
+      if(data.error) {
+        alert(data.error);
+        // Jika salah password, kembalikan UI ke awal agar bisa dicoba lagi
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
+        return; 
+      }
 
       dataKelasX = data.siswaX || [];
       dataKelasXI = data.siswaXI || [];
@@ -95,7 +133,15 @@
       
       extractOrgs();
       renderTable();
-    } catch(e) { alert("Gagal memuat data"); }
+    } catch(e) { 
+      alert("Gagal memuat data. Periksa koneksi internet Anda."); 
+    } finally {
+      // Matikan UI Loading jika berhasil atau gagal (kecuali saat salah password yang sudah di-return)
+      if (!btn.disabled === false) {
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
+      }
+    }
   }
 
   function setTab(kelas) {
