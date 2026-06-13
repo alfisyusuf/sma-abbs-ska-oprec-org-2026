@@ -6,754 +6,148 @@
   <title>Dashboard Pengurus — SMA ABBS Surakarta</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --maroon:      #7B1A1A;
-      --maroon-dark: #5A1010;
-      --maroon-mid:  #A52020;
-      --maroon-soft: #FBEAEA;
-      --gold:        #C9952A;
-      --gold-soft:   #FDF3DC;
-      --bg:          #F4EFEE;
-      --card:        #FFFFFF;
-      --text:        #1C1C1E;
-      --muted:       #6B7280;
-      --border:      #E5D8D8;
-      --radius:      16px;
-    }
-
+    /* CSS Sama seperti file admin.html sebelumnya, dengan tambahan styling Tab dan Select */
+    :root { --maroon: #7B1A1A; --maroon-mid: #A52020; --bg: #F4EFEE; --card: #FFFFFF; --text: #1C1C1E; --muted: #6B7280; --border: #E5D8D8; --radius: 16px; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ── LOGIN SCREEN ────────────────────────────────────── */
-    #loginScreen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: var(--maroon);
-      background-image: repeating-linear-gradient(
-        45deg, transparent, transparent 18px,
-        rgba(255,255,255,0.03) 18px, rgba(255,255,255,0.03) 19px
-      );
-    }
-    .login-box {
-      background: white;
-      border-radius: 24px;
-      padding: 36px 28px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-    .login-logo-wrap {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .login-logo {
-      width: 64px; height: 64px;
-      object-fit: contain;
-      border-radius: 50%;
-      border: 3px solid var(--maroon-soft);
-    }
-    .login-logo-fallback {
-      width: 64px; height: 64px;
-      background: var(--maroon-soft);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      margin: 0 auto;
-      display: none;
-    }
-    .login-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--maroon);
-      text-align: center;
-      margin-bottom: 4px;
-    }
-    .login-sub {
-      font-size: 13px;
-      color: var(--muted);
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .login-field label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .login-field input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .login-field input:focus {
-      border-color: var(--maroon);
-      box-shadow: 0 0 0 3px rgba(123,26,26,0.1);
-    }
-    .login-field input.error {
-      border-color: #EF4444;
-      background: #FEF2F2;
-    }
-    #loginError {
-      font-size: 13px;
-      color: #DC2626;
-      background: #FEF2F2;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-top: 10px;
-      display: none;
-    }
-    .btn-login {
-      width: 100%;
-      margin-top: 16px;
-      padding: 15px;
-      background: linear-gradient(135deg, var(--maroon), var(--maroon-mid));
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 6px 20px rgba(123,26,26,0.35);
-      transition: transform 0.15s;
-    }
-    .btn-login:active { transform: scale(0.98); }
-    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* ── DASHBOARD ───────────────────────────────────────── */
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    
+    #loginScreen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: var(--maroon); }
+    .login-box { background: white; border-radius: 24px; padding: 36px 28px; width: 100%; max-width: 380px; text-align:center; }
+    .login-box input { width: 100%; padding: 14px; border: 1.5px solid var(--border); border-radius: 12px; margin: 16px 0; outline: none; }
+    .btn-login { width: 100%; padding: 14px; background: var(--maroon); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+    
     #dashboard { display: none; }
-
-    .dash-header {
-      background: var(--maroon);
-      background-image: repeating-linear-gradient(
-        45deg, transparent, transparent 18px,
-        rgba(255,255,255,0.04) 18px, rgba(255,255,255,0.04) 19px
-      );
-      padding: 20px 20px 24px;
-      position: relative;
-    }
-    .dash-header::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--gold), #E8B84B, var(--gold));
-    }
-    .dash-header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .dash-title-block { display: flex; align-items: center; gap: 12px; }
-    .dash-logo {
-      width: 44px; height: 44px;
-      object-fit: contain;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      padding: 3px;
-    }
-    .dash-logo-fallback {
-      width: 44px; height: 44px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 50%;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: white;
-    }
-    .dash-title { font-size: 18px; font-weight: 800; color: white; }
-    .dash-sub   { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
-    .dash-actions { display: flex; gap: 8px; }
-
-    .btn-icon {
-      padding: 9px 14px;
-      border-radius: 10px;
-      border: none;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
-    }
-    .btn-refresh {
-      background: rgba(255,255,255,0.15);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.25);
-    }
-    .btn-refresh:hover { background: rgba(255,255,255,0.25); }
-    .btn-logout {
-      background: rgba(239,68,68,0.15);
-      color: #FCA5A5;
-      border: 1px solid rgba(239,68,68,0.2);
-    }
-    .btn-logout:hover { background: rgba(239,68,68,0.25); }
-
-    /* ── MAIN CONTENT ────────────────────────────────────── */
-    .dash-body {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-    }
-
-    /* ── STAT CARDS ──────────────────────────────────────── */
-    #statCards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    @media (min-width: 500px) { #statCards { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 768px) { #statCards { grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 1024px){ #statCards { grid-template-columns: repeat(5, 1fr); } }
-
-    .stat-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
-    .stat-card.primary {
-      background: linear-gradient(135deg, var(--maroon), var(--maroon-mid));
-      border-color: transparent;
-    }
-    .stat-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .stat-card.primary .stat-label { color: rgba(255,255,255,0.7); }
-    .stat-value {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--maroon);
-      line-height: 1;
-    }
-    .stat-card.primary .stat-value { color: white; }
-    .stat-unit {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-    .stat-card.primary .stat-unit { color: rgba(255,255,255,0.6); }
-
-    /* ── TOOLBAR ─────────────────────────────────────────── */
-    .table-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-    .table-toolbar h2 {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    #searchInput {
-      padding: 9px 14px 9px 36px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 13px;
-      background: white url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='6' cy='6' r='4.5' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M9.5 9.5L12 12' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 12px center;
-      width: 100%;
-      max-width: 260px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    #searchInput:focus { border-color: var(--maroon); }
-
-    .btn-export {
-      padding: 9px 14px;
-      background: var(--gold-soft);
-      color: #92400E;
-      border: 1px solid #FDE68A;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .btn-export:hover { background: #FEF3C7; }
-
-    /* ── TABLE ───────────────────────────────────────────── */
-    .table-wrap {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
-    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13.5px;
-      white-space: nowrap;
-    }
-    thead th {
-      background: #F9F3F3;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 13px 16px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
-    tbody tr { border-bottom: 1px solid #F5EEEE; transition: background 0.1s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #FDF8F8; }
-    td { padding: 13px 16px; color: var(--text); }
-    td.muted { color: var(--muted); font-size: 12px; }
-
-    .badge-org {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .badge-org.pilihan1 { background: var(--maroon-soft); color: var(--maroon); border: 1px solid #F5D0D0; }
-    .badge-org.pilihan2 { background: #F3F4F6; color: #374151; border: 1px solid #E5E7EB; }
-
-    .wa-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      color: #16A34A;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 13px;
-    }
-    .wa-link:hover { text-decoration: underline; }
-
-    #tableEmpty {
-      padding: 48px 20px;
-      text-align: center;
-      color: var(--muted);
-      display: none;
-    }
-    .empty-icon { font-size: 40px; margin-bottom: 12px; }
-    .empty-text { font-size: 14px; font-weight: 600; }
-    .empty-sub  { font-size: 13px; margin-top: 4px; }
-
-    .row-num {
-      font-size: 11px;
-      color: #C4B5B5;
-      font-weight: 600;
-      min-width: 28px;
-    }
-
-    /* ── PAGINATION ──────────────────────────────────────── */
-    .pagination {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border-top: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--muted);
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .page-btns { display: flex; gap: 4px; }
-    .page-btn {
-      padding: 6px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      background: white;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--text);
-      transition: all 0.15s;
-    }
-    .page-btn:hover:not(:disabled) { border-color: var(--maroon); color: var(--maroon); }
-    .page-btn.active { background: var(--maroon); color: white; border-color: var(--maroon); }
-    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-    /* ── LAST UPDATED ────────────────────────────────────── */
-    #lastUpdated {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      padding: 12px;
-    }
-
-    /* ── SPINNER ─────────────────────────────────────────── */
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spin { animation: spin 0.8s linear infinite; }
+    .dash-header { background: var(--maroon); padding: 20px; color: white; display: flex; justify-content: space-between; align-items: center; }
+    .dash-body { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+    
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: white; padding: 6px; border-radius: 12px; border: 1px solid var(--border); width: max-content; }
+    .tab-btn { padding: 8px 24px; border: none; background: transparent; border-radius: 8px; font-weight: 700; cursor: pointer; color: var(--muted); transition: 0.2s; }
+    .tab-btn.active { background: var(--maroon-soft); color: var(--maroon); }
+    
+    .toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .toolbar input, .toolbar select { padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; outline: none; font-family: inherit; font-size: 13px; }
+    
+    .table-wrap { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
+    th { background: #F9F3F3; color: var(--muted); font-size: 11px; text-transform: uppercase; padding: 12px 16px; text-align: left; }
+    td { padding: 12px 16px; border-bottom: 1px solid #F5EEEE; }
+    .badge-org { padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; background: #F3F4F6; }
   </style>
 </head>
 <body>
 
-  <!-- ── LOGIN ──────────────────────────────────────────── -->
   <div id="loginScreen">
     <div class="login-box">
-      <div class="login-logo-wrap">
-        <img src="logo_sma_abbs_surakarta.png" alt="Logo" class="login-logo"
-             onerror="this.style.display='none'; document.getElementById('loginLogoFallback').style.display='flex';">
-        <div id="loginLogoFallback" class="login-logo-fallback">🏫</div>
-      </div>
-      <h2 class="login-title">Akses Pengurus</h2>
-      <p class="login-sub">Dashboard Rekapitulasi Pendaftar Organisasi</p>
-      <div class="login-field">
-        <label for="adminPass">Kata Sandi Pengurus</label>
-        <input type="password" id="adminPass" placeholder="Masukkan kata sandi…">
-      </div>
-      <div id="loginError"></div>
-      <button class="btn-login" id="btnLogin" onclick="login()">
-        Masuk Dashboard
-      </button>
+      <h2 style="color:var(--maroon)">Akses Pengurus</h2>
+      <input type="password" id="adminPass" placeholder="Kata Sandi">
+      <button class="btn-login" onclick="login()">Masuk Dashboard</button>
     </div>
   </div>
 
-  <!-- ── DASHBOARD ──────────────────────────────────────── -->
   <div id="dashboard">
     <div class="dash-header">
-      <div class="dash-header-inner">
-        <div class="dash-title-block">
-          <img src="logo_sma_abbs_surakarta.png" alt="Logo" class="dash-logo"
-               onerror="this.style.display='none'; document.getElementById('dashLogoFallback').style.display='flex';">
-          <div id="dashLogoFallback" class="dash-logo-fallback">🏫</div>
-          <div>
-            <div class="dash-title">Rekapitulasi Pendaftar</div>
-            <div class="dash-sub">SMA ABBS Surakarta · Real-time</div>
-          </div>
-        </div>
-        <div class="dash-actions">
-          <button class="btn-icon btn-refresh" id="btnRefresh" onclick="fetchData(true)">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7A6 6 0 1 0 3.5 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M1 3v3.5H4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Segarkan
-          </button>
-          <button class="btn-icon btn-logout" onclick="logout()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 10V12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v2M6 7h6M10 5l2 2-2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Keluar
-          </button>
-        </div>
-      </div>
+      <div><h2>Rekapitulasi</h2><span style="font-size:12px;opacity:0.8">SMA ABBS Surakarta</span></div>
+      <div><button onclick="fetchData()" style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Refresh</button></div>
     </div>
 
     <div class="dash-body">
-      <div id="statCards"></div>
+      <div class="tabs">
+        <button class="tab-btn active" id="tabX" onclick="setTab('X')">Kelas X</button>
+        <button class="tab-btn" id="tabXI" onclick="setTab('XI')">Kelas XI</button>
+      </div>
 
-      <div class="table-toolbar">
-        <h2>Daftar Pendaftar</h2>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-          <input type="text" id="searchInput" placeholder="Cari nama / organisasi…" oninput="filterTable()">
-          <button class="btn-export" onclick="exportCSV()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 10v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Export CSV
-          </button>
-        </div>
+      <div class="toolbar">
+        <input type="text" id="searchInp" placeholder="Cari nama..." oninput="renderTable()" style="flex:1; max-width:250px;">
+        <select id="orgFilter" onchange="renderTable()">
+          <option value="">Semua Organisasi</option>
+          </select>
+        <p style="font-size: 13px; color: var(--muted); margin-left: auto; align-self: center;">Total Terfilter: <strong id="totalCount">0</strong></p>
       </div>
 
       <div class="table-wrap">
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Waktu Daftar</th>
-                <th>Nama Siswa</th>
-                <th>WhatsApp</th>
-                <th>Orang Tua / Wali</th>
-                <th>Pilihan 1</th>
-                <th>Pilihan 2</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-          </table>
-        </div>
-        <div id="tableEmpty">
-          <div class="empty-icon">📋</div>
-          <div class="empty-text">Belum ada data pendaftar</div>
-          <div class="empty-sub">Data akan muncul di sini setelah siswa mendaftar.</div>
-        </div>
-        <div class="pagination" id="paginationBar" style="display:none;">
-          <span id="pageInfo"></span>
-          <div class="page-btns" id="pageBtns"></div>
-        </div>
+        <table>
+          <thead>
+            <tr><th>No</th><th>Nama Siswa</th><th>Kelas</th><th>Waktu Daftar</th><th>Pilihan 1</th><th>Pilihan 2</th></tr>
+          </thead>
+          <tbody id="tBody"></tbody>
+        </table>
       </div>
-
-      <div id="lastUpdated"></div>
     </div>
   </div>
 
 <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwMbGr_jeASgMPn2MaPalsXlGKNDbKSe17aY0Oh-FFpdg4ZuT14IRThQpch2yabhTkK/exec';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxEJwQ7xU2oToumwJs7l3eS1xqS_B8Y-zYeYj-GAQmHTePEtEBfprbiH4YmEtzTYFrp/exec'; 
+  let dataKelasX = [], dataKelasXI = [], activeTab = 'X', currentPass = '';
 
-  let currentPass  = '';
-  let allRows      = [];
-  let filteredRows = [];
-  let currentPage  = 1;
-  const PAGE_SIZE  = 20;
+  function login() { currentPass = document.getElementById('adminPass').value; fetchData(); }
 
-  // Enter key for login
-  document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-
-  // ── LOGIN ─────────────────────────────────────────
-  function login() {
-    const pass = document.getElementById('adminPass').value.trim();
-    if (!pass) {
-      showLoginError('Kata sandi tidak boleh kosong.');
-      return;
-    }
-    currentPass = pass;
-    fetchData(false);
-  }
-
-  function showLoginError(msg) {
-    const el = document.getElementById('loginError');
-    el.textContent = msg;
-    el.style.display = 'block';
-    document.getElementById('adminPass').classList.add('error');
-  }
-
-  function logout() {
-    currentPass = '';
-    document.getElementById('adminPass').value = '';
-    document.getElementById('loginError').style.display = 'none';
-    document.getElementById('adminPass').classList.remove('error');
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('loginScreen').style.display = 'flex';
-  }
-
-  // ── FETCH ─────────────────────────────────────────
-  async function fetchData(isRefresh) {
-    const btn = isRefresh
-      ? document.getElementById('btnRefresh')
-      : document.getElementById('btnLogin');
-
-    const origHTML = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = `<svg class="spin" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 1 0 2-4.47" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ${isRefresh ? 'Menyegarkan…' : 'Memverifikasi…'}`;
-
+  async function fetchData() {
     try {
-      const res  = await fetch(`${API_URL}?action=getAdmin&password=${encodeURIComponent(currentPass)}`);
+      const res = await fetch(`${API_URL}?action=getAdmin&password=${currentPass}`);
       const data = await res.json();
+      if(data.error) return alert(data.error);
 
-      if (data.error) {
-        showLoginError(data.error);
-      } else {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('loginError').style.display = 'none';
-        processData(data.pendaftar || []);
-        document.getElementById('lastUpdated').textContent = `Terakhir diperbarui: ${new Date().toLocaleTimeString('id-ID')}`;
-      }
-    } catch (e) {
-      const msg = 'Gagal terhubung ke server. Periksa koneksi Anda.';
-      if (isRefresh) alert(msg);
-      else showLoginError(msg);
-    } finally {
-      btn.disabled  = false;
-      btn.innerHTML = origHTML;
-    }
+      dataKelasX = data.siswaX || [];
+      dataKelasXI = data.siswaXI || [];
+      
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      
+      extractOrgs();
+      renderTable();
+    } catch(e) { alert("Gagal memuat data"); }
   }
 
-  // ── PROCESS DATA ──────────────────────────────────
-  function processData(rows) {
-    // Newest first; filter empty
-    allRows = rows.filter(r => r[1]).reverse();
-    renderStats(allRows);
-    filterTable();
-  }
-
-  function renderStats(rows) {
-    const container = document.getElementById('statCards');
-    container.innerHTML = '';
-    const stats = {};
-
-    rows.forEach(row => {
-      [row[5], row[6]].forEach(org => {
-        if (org && org !== '-') stats[org] = (stats[org] || 0) + 1;
-      });
-    });
-
-    // Total card
-    container.innerHTML += `
-      <div class="stat-card primary">
-        <div class="stat-label">Total Pendaftar</div>
-        <div class="stat-value">${rows.length}</div>
-        <div class="stat-unit">Siswa</div>
-      </div>`;
-
-    // Per org, sorted
-    Object.entries(stats).sort((a,b) => b[1]-a[1]).forEach(([org, count]) => {
-      container.innerHTML += `
-        <div class="stat-card">
-          <div class="stat-label" title="${org}">${org}</div>
-          <div class="stat-value" style="color:var(--maroon)">${count}</div>
-          <div class="stat-unit">Peminat</div>
-        </div>`;
-    });
-  }
-
-  // ── SEARCH & FILTER ───────────────────────────────
-  function filterTable() {
-    const q = (document.getElementById('searchInput').value || '').toLowerCase();
-    filteredRows = q
-      ? allRows.filter(r =>
-          (r[1]||'').toLowerCase().includes(q) ||
-          (r[5]||'').toLowerCase().includes(q) ||
-          (r[6]||'').toLowerCase().includes(q) ||
-          (r[3]||'').toLowerCase().includes(q)
-        )
-      : [...allRows];
-    currentPage = 1;
+  function setTab(kelas) {
+    activeTab = kelas;
+    document.getElementById('tabX').className = 'tab-btn' + (kelas==='X'?' active':'');
+    document.getElementById('tabXI').className = 'tab-btn' + (kelas==='XI'?' active':'');
     renderTable();
   }
 
-  // ── RENDER TABLE ──────────────────────────────────
-  function renderTable() {
-    const tbody  = document.getElementById('tableBody');
-    const empty  = document.getElementById('tableEmpty');
-    const pgBar  = document.getElementById('paginationBar');
-    tbody.innerHTML = '';
-
-    if (!filteredRows.length) {
-      empty.style.display = 'block';
-      pgBar.style.display = 'none';
-      return;
-    }
-
-    empty.style.display = 'none';
-
-    const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE);
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const pageRows = filteredRows.slice(start, start + PAGE_SIZE);
-
-    pageRows.forEach((row, i) => {
-      const absIdx = start + i + 1;
-      let dateStr = '—';
-      if (row[0]) {
-        const d = new Date(row[0]);
-        dateStr = d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' })
-          + ' ' + d.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-      }
-      const waNum = (row[2] || '').toString().replace(/\D/g, '');
-
-      tbody.innerHTML += `
-        <tr>
-          <td class="row-num">${absIdx}</td>
-          <td class="muted">${dateStr}</td>
-          <td><span style="font-weight:600">${row[1] || '—'}</span></td>
-          <td>
-            <a href="https://wa.me/${waNum}" target="_blank" rel="noopener" class="wa-link">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#16A34A"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
-              ${row[2] || '—'}
-            </a>
-          </td>
-          <td style="color:var(--muted)">${row[3] || '—'}</td>
-          <td>
-            <span class="badge-org pilihan1">${row[5] || '—'}</span>
-          </td>
-          <td>
-            ${row[6] && row[6] !== '-'
-              ? `<span class="badge-org pilihan2">${row[6]}</span>`
-              : `<span style="color:#D1C4C4;font-size:13px">—</span>`
-            }
-          </td>
-        </tr>`;
+  function extractOrgs() {
+    const orgs = new Set();
+    [...dataKelasX, ...dataKelasXI].forEach(r => {
+      if(r[4]) orgs.add(r[4]); // Pilihan 1 (Kolom E / index 4)
+      if(r[5] && r[5] !== '-') orgs.add(r[5]); // Pilihan 2 (Kolom F / index 5)
     });
-
-    // Pagination
-    const pageInfo = document.getElementById('pageInfo');
-    const pageBtns = document.getElementById('pageBtns');
-    pageInfo.textContent = `${start + 1}–${Math.min(start + PAGE_SIZE, filteredRows.length)} dari ${filteredRows.length} pendaftar`;
-
-    pageBtns.innerHTML = '';
-    const makeBtn = (label, page, disabled, active) => {
-      const b = document.createElement('button');
-      b.className = 'page-btn' + (active ? ' active' : '');
-      b.textContent = label;
-      b.disabled = disabled;
-      b.onclick = () => { currentPage = page; renderTable(); };
-      pageBtns.appendChild(b);
-    };
-
-    makeBtn('‹', currentPage - 1, currentPage === 1, false);
-
-    // Show limited page buttons
-    let start_ = Math.max(1, currentPage - 2);
-    let end_   = Math.min(totalPages, currentPage + 2);
-    for (let p = start_; p <= end_; p++) makeBtn(p, p, false, p === currentPage);
-
-    makeBtn('›', currentPage + 1, currentPage === totalPages, false);
-
-    pgBar.style.display = 'flex';
+    const filter = document.getElementById('orgFilter');
+    filter.innerHTML = '<option value="">Semua Organisasi</option>';
+    [...orgs].sort().forEach(o => filter.innerHTML += `<option value="${o}">${o}</option>`);
   }
 
-  // ── EXPORT CSV ────────────────────────────────────
-  function exportCSV() {
-    if (!allRows.length) { alert('Tidak ada data untuk diexport.'); return; }
-    const header = ['No', 'Waktu Daftar', 'Nama Siswa', 'WA Siswa', 'Nama Ortu/Wali', 'WA Ortu', 'Pilihan 1', 'Pilihan 2'];
-    const rows = allRows.map((r, i) => [
-      i + 1,
-      r[0] ? new Date(r[0]).toLocaleString('id-ID') : '',
-      r[1] || '', r[2] || '', r[3] || '', r[4] || '', r[5] || '', r[6] || ''
-    ]);
-    const csv = [header, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url  = URL.createObjectURL(blob);
-    const a    = Object.assign(document.createElement('a'), {
-      href: url,
-      download: `pendaftar_abbs_${new Date().toLocaleDateString('id-ID').replace(/\//g,'-')}.csv`
+  function renderTable() {
+    const rawData = activeTab === 'X' ? dataKelasX : dataKelasXI;
+    const q = document.getElementById('searchInp').value.toLowerCase();
+    const fOrg = document.getElementById('orgFilter').value;
+    
+    // Asumsi Sheet: [0]No, [1]Nama, [2]Kelas, [3]NIS, [4]Pil1, [5]Pil2, [6]Waktu
+    const filtered = rawData.filter(r => {
+      const isRegistered = r[6]; // Cek apakah kolom Timestamp ada isinya
+      if(!isRegistered) return false; // Abaikan siswa yang belum mendaftar
+
+      const matchName = (r[1]||'').toLowerCase().includes(q);
+      const matchOrg = !fOrg || r[4] === fOrg || r[5] === fOrg;
+      return matchName && matchOrg;
     });
-    a.click();
-    URL.revokeObjectURL(url);
+
+    // Urutkan berdasarkan waktu daftar terbaru
+    filtered.sort((a,b) => new Date(b[6]) - new Date(a[6]));
+
+    document.getElementById('totalCount').textContent = filtered.length;
+    const tbody = document.getElementById('tBody'); tbody.innerHTML = '';
+    
+    filtered.forEach((r, i) => {
+      const time = r[6] ? new Date(r[6]).toLocaleString('id-ID') : '-';
+      tbody.innerHTML += `<tr>
+        <td style="color:var(--muted)">${i+1}</td>
+        <td><strong>${r[1]}</strong></td>
+        <td>${r[2]}</td>
+        <td style="color:var(--muted)">${time}</td>
+        <td><span class="badge-org">${r[4] || '-'}</span></td>
+        <td>${r[5] && r[5]!=='-' ? `<span class="badge-org">${r[5]}</span>` : '-'}</td>
+      </tr>`;
+    });
   }
 </script>
 </body>
