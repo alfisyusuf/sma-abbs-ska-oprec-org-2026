@@ -181,7 +181,7 @@
     .field-hint.success { color: #15803D; }
     .field-hint.error   { color: #DC2626; }
     .field-hint.warn    { color: #92400E; background: #FEF3C7; padding: 6px 10px; border-radius: 8px; margin-top: 8px; border: 1px solid #FDE68A; }
-    .field-hint.hidden  { display: none; }
+    .hidden  { display: none !important; }
 
     /* ── AUTOCOMPLETE ───────────────────────────────────────── */
     .autocomplete-wrap { position: relative; }
@@ -306,7 +306,7 @@
     <span class="badge-tahun">SMA ABBS Surakarta</span>
   </div>
 
-  <div class="container">
+  <div class="container" id="closedContainer" style="display: none;">
     <div id="closedState">
       <div class="closed-icon">🔒</div>
       <h2 id="closedTitle">Pendaftaran Ditutup</h2>
@@ -464,7 +464,7 @@
         <span style="line-height:1.5">Pendaftaran saat ini dibuka untuk <strong>${infoKelas.join(' dan ')}</strong>.</span>
       `;
       
-      document.getElementById('closedState').style.display = 'none';
+      document.getElementById('closedContainer').style.display = 'none';
       document.getElementById('mainForm').style.display = 'block';
     } else {
       formEnabled = false;
@@ -487,7 +487,7 @@
 
   function closedUI(title, desc) {
     document.getElementById('mainForm').style.display = 'none';
-    document.getElementById('closedState').style.display = 'block';
+    document.getElementById('closedContainer').style.display = 'block';
     document.getElementById('closedTitle').textContent = title;
     document.getElementById('closedDesc').textContent  = desc;
   }
