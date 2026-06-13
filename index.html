@@ -152,10 +152,11 @@
       daftarOrganisasi.forEach(org => {
         const div = document.createElement('div');
         const isUtama = org.kategori.toLowerCase() === 'utama';
-        // Konversi ID Drive menjadi URL Gambar langsung
         const imgSrc = org.logo ? `https://drive.google.com/thumbnail?id=${org.logo}&sz=w200` : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlMGUwZTAiLz48L3N2Zz4=';
 
         div.className = `group p-4 rounded-xl border-2 border-transparent bg-white/70 text-center cursor-pointer transition-all duration-300 relative shadow-sm hover:shadow-md flex flex-col items-center justify-center min-h-[110px]`;
+        
+        // Perhatikan badge-info diset opacity-0 by default agar tidak terlihat sampai di-hover/diklik
         div.innerHTML = `
           <div class="absolute inset-0 border-2 border-gray-200 rounded-xl pointer-events-none transition-colors duration-300 card-border"></div>
           <div class="absolute top-2 right-2 opacity-0 transition-opacity duration-200 check-icon text-[#7B1A1A]">
@@ -165,7 +166,7 @@
             <img src="${imgSrc}" alt="Logo ${org.nama}" class="h-full w-auto max-w-[90%] object-contain drop-shadow-md pointer-events-none transition-transform duration-300 group-hover:scale-110" loading="lazy">
           </div>
           <h3 class="font-bold text-xs pointer-events-none">${org.nama} ${isUtama ? '<span class="text-red-500">*</span>' : ''}</h3>
-          <span class="text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium transition-colors pointer-events-none badge-info text-gray-500 bg-gray-100">${org.kategori}</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium transition-all pointer-events-none badge-info opacity-0"></span>
         `;
         
         div.onmouseenter = () => {
@@ -174,22 +175,24 @@
           const hasUtama = selectedOrgs.some(s => daftarOrganisasi.find(o => o.nama === s).kategori.toLowerCase() === 'utama');
           const borderEl = div.querySelector('.card-border');
           const badgeEl = div.querySelector('.badge-info');
+          
+          badgeEl.classList.remove('opacity-0'); // Munculkan badge saat hover
 
           if (selectedOrgs.length >= 2) {
             div.classList.add('hover-red');
             borderEl.classList.replace('border-gray-200', 'border-red-400');
             badgeEl.textContent = 'Maksimal 2';
-            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-red-700 bg-red-100';
+            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-red-700 bg-red-100 opacity-100';
           } else if (isUtama && hasUtama) {
             div.classList.add('hover-red');
             borderEl.classList.replace('border-gray-200', 'border-red-400');
             badgeEl.textContent = 'Tidak bisa irisan';
-            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-red-700 bg-red-100';
+            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-red-700 bg-red-100 opacity-100';
           } else {
             div.classList.add('hover-green');
             borderEl.classList.replace('border-gray-200', 'border-green-400');
             badgeEl.textContent = 'Bisa dipilih';
-            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-green-700 bg-green-100';
+            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-green-700 bg-green-100 opacity-100';
           }
         };
 
@@ -199,8 +202,8 @@
           const badgeEl = div.querySelector('.badge-info');
           if (!selectedOrgs.includes(org.nama)) {
             borderEl.className = 'absolute inset-0 border-2 border-gray-200 rounded-xl pointer-events-none transition-colors duration-300 card-border';
-            badgeEl.textContent = org.kategori;
-            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium transition-colors pointer-events-none badge-info text-gray-500 bg-gray-100';
+            badgeEl.textContent = '';
+            badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium transition-all pointer-events-none badge-info opacity-0';
           }
         };
         
@@ -208,10 +211,8 @@
           const hasUtama = selectedOrgs.some(s => daftarOrganisasi.find(o => o.nama === s).kategori.toLowerCase() === 'utama');
           
           if (selectedOrgs.includes(org.nama)) {
-            // Deselect
             selectedOrgs = selectedOrgs.filter(s => s !== org.nama);
           } else {
-            // Validasi Interaksi
             if (isUtama && hasUtama) {
               triggerShake(div);
               showConflictMessage();
@@ -246,7 +247,6 @@
       
       Array.from(cards).forEach((card, i) => {
         const orgNama = daftarOrganisasi[i].nama;
-        const orgKat = daftarOrganisasi[i].kategori;
         const borderEl = card.querySelector('.card-border');
         const badgeEl = card.querySelector('.badge-info');
         const checkIcon = card.querySelector('.check-icon');
@@ -255,19 +255,19 @@
           card.classList.add('selected-org');
           borderEl.className = 'absolute inset-0 border-2 border-[#7B1A1A] rounded-xl pointer-events-none transition-colors duration-300 card-border';
           badgeEl.textContent = 'Terpilih';
-          badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-[#7B1A1A] bg-white border border-[#7B1A1A]';
+          badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium pointer-events-none badge-info text-[#7B1A1A] bg-white border border-[#7B1A1A] opacity-100';
           checkIcon.classList.remove('opacity-0');
         } else {
           card.classList.remove('selected-org');
           borderEl.className = 'absolute inset-0 border-2 border-gray-200 rounded-xl pointer-events-none transition-colors duration-300 card-border';
-          badgeEl.textContent = orgKat;
-          badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium transition-colors pointer-events-none badge-info text-gray-500 bg-gray-100';
+          badgeEl.textContent = '';
+          badgeEl.className = 'text-[10px] px-2 py-0.5 rounded-full mt-1 font-medium transition-all pointer-events-none badge-info opacity-0';
           checkIcon.classList.add('opacity-0');
         }
       });
     }
 
-    // Autocomplete Nama dari Data Sheet
+    // Autocomplete Nama
     const inputNama = document.getElementById('nama');
     const listNama = document.getElementById('autocomplete-list');
     
@@ -276,7 +276,6 @@
       listNama.innerHTML = '';
       if (!val) { listNama.classList.add('hidden'); return; }
       
-      // Filter data siswa
       const matches = daftarSiswa.filter(s => s.nama.toLowerCase().includes(val.toLowerCase()));
       if (matches.length > 0) listNama.classList.remove('hidden');
       else listNama.classList.add('hidden');
@@ -296,16 +295,15 @@
       });
     });
 
-    // Auto-capitalize Nama Ortu
+    // Validasi & Format Form
     document.getElementById('namaOrtu').addEventListener('input', function(e) {
       this.value = this.value.replace(/\b\w/g, c => c.toUpperCase());
     });
 
-    // Validasi Nomor WA
     function setupWAValidation(id, errorId) {
       const el = document.getElementById(id);
       el.addEventListener('blur', () => {
-        let val = el.value.replace(/\D/g, ''); // Hapus karakter non-digit
+        let val = el.value.replace(/\D/g, ''); 
         if (val.startsWith('0')) val = '62' + val.substring(1);
         el.value = val;
         
@@ -321,7 +319,82 @@
     setupWAValidation('wa', 'waError');
     setupWAValidation('waOrtu', 'waOrtuError');
 
-    // Mulai ambil data saat halaman dimuat
+    // --------------------------------------------------------
+    // FUNGSI SUBMIT DATA KE GOOGLE SHEETS
+    // --------------------------------------------------------
+    document.getElementById('btnSubmit').addEventListener('click', async function() {
+      // Ambil nilai dari input
+      const nama = document.getElementById('nama').value.trim();
+      const wa = document.getElementById('wa').value.trim();
+      const namaOrtu = document.getElementById('namaOrtu').value.trim();
+      const waOrtu = document.getElementById('waOrtu').value.trim();
+
+      // Validasi Input
+      if (!nama || !wa || !namaOrtu || !waOrtu) {
+        alert('Gagal: Mohon lengkapi semua data diri dan data orang tua/wali.');
+        return;
+      }
+      if (!wa.startsWith('62') || !waOrtu.startsWith('62')) {
+        alert('Gagal: Pastikan nomor WhatsApp sudah benar dan diawali dengan 62.');
+        return;
+      }
+      if (selectedOrgs.length === 0) {
+        alert('Gagal: Anda harus memilih minimal 1 organisasi.');
+        return;
+      }
+
+      // Siapkan struktur data (Payload)
+      const dataPayload = {
+        nama: nama,
+        wa: wa,
+        namaOrtu: namaOrtu,
+        waOrtu: waOrtu,
+        pilihan1: selectedOrgs[0],
+        pilihan2: selectedOrgs.length > 1 ? selectedOrgs[1] : '-'
+      };
+
+      // Efek Loading pada Tombol Submit
+      const btnSubmit = document.getElementById('btnSubmit');
+      const textAsli = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = 'Mengirim Data... <svg class="animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+      btnSubmit.disabled = true;
+      btnSubmit.classList.add('opacity-75', 'cursor-wait');
+
+      try {
+        // Kirim HTTP POST ke Google Apps Script
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(dataPayload)
+        });
+
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+          alert('Pendaftaran Berhasil! Data Anda sudah masuk ke sistem kami.');
+          
+          // Reset formulir pendaftaran
+          document.getElementById('formDaftar').reset();
+          document.getElementById('infoSiswa').classList.add('hidden');
+          selectedOrgs = [];
+          updateOrgUI(); // Hilangkan gaya terpilih di kartu
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          alert('Terjadi kendala saat menyimpan data. Silakan coba lagi.');
+        }
+
+      } catch (error) {
+        // GAS Web App sering memicu CORS error yang tersembunyi namun data tetap masuk
+        // Blok catch ini dapat dimanfaatkan jika menggunakan "no-cors"
+        console.error('Submission Error:', error);
+        alert('Terjadi kesalahan koneksi server. Pastikan internet Anda stabil.');
+      } finally {
+        // Kembalikan kondisi tombol seperti semula
+        btnSubmit.innerHTML = textAsli;
+        btnSubmit.disabled = false;
+        btnSubmit.classList.remove('opacity-75', 'cursor-wait');
+      }
+    });
+
     window.addEventListener('DOMContentLoaded', fetchData);
   </script>
 </body>
