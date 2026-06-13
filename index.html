@@ -23,7 +23,13 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
     /* ── PRELOADER ────────────────────────────────────────── */
     #preloader {
@@ -31,86 +37,443 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-    .preloader-logo { width: 90px; height: 90px; object-fit: contain; animation: pulse 1.5s infinite; drop-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .preloader-text { margin-top: 16px; font-weight: 700; color: var(--maroon); font-size: 15px; letter-spacing: 0.5px; }
+    .preloader-logo { 
+      width: 90px; height: 90px; object-fit: contain; 
+      animation: pulse 1.5s infinite; 
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1)); 
+    }
+    .preloader-text { 
+      margin-top: 16px; font-weight: 700; color: var(--maroon); 
+      font-size: 15px; letter-spacing: 0.5px; 
+    }
     @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
 
-    /* ── HEADER ───────────────────────────────────────────── */
+    /* ── HEADER ─────────────────────────────────────────────── */
     .site-header {
       background: var(--maroon);
-      background-image: repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(255,255,255,0.04) 18px, rgba(255,255,255,0.04) 19px);
-      padding: 24px 20px 16px; /* Spasi dipangkas */
-      text-align: center; position: relative;
+      background-image:
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 18px,
+          rgba(255,255,255,0.04) 18px,
+          rgba(255,255,255,0.04) 19px
+        );
+      padding: 24px 20px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .site-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--gold), #E8B84B, var(--gold)); }
-    .header-logo { width: 64px; height: 64px; object-fit: contain; border-radius: 50%; background: white; padding: 4px; margin: 0 auto 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: block; }
-    .site-header h1 { font-size: 20px; font-weight: 800; color: #fff; line-height: 1.2; }
-    .badge-tahun { display: inline-block; margin-top: 8px; background: var(--gold); color: var(--maroon-dark); font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
+    .site-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--gold), #E8B84B, var(--gold));
+    }
+    .header-logo {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: white;
+      padding: 4px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .site-header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .badge-tahun {
+      display: inline-block;
+      margin-top: 8px;
+      background: var(--gold);
+      color: var(--maroon-dark);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
 
-    /* ── MAIN CONTENT & CARDS ─────────────────────────────── */
-    .container { max-width: 600px; margin: 0 auto; padding: 16px 16px 100px; }
-    #timelineBanner { border-radius: var(--radius); padding: 12px 16px; font-size: 12px; font-weight: 600; display: none; align-items: center; gap: 10px; margin-bottom: 16px; }
-    #timelineBanner.info { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+    /* ── TIMELINE BANNER ────────────────────────────────────── */
+    #timelineBanner {
+      margin: 16px 16px 0;
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      display: none;
+    }
+    #timelineBanner.info  { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
     #timelineBanner.error { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
-    #timelineBanner.warn { background: var(--gold-soft); color: #92400E; border: 1px solid #FDE68A; }
+    #timelineBanner.warn  { background: var(--gold-soft); color: #92400E; border: 1px solid #FDE68A; }
 
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .section-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--maroon); text-transform: uppercase; margin-bottom: 16px; }
-    .section-label-bar { width: 3px; height: 16px; background: var(--gold); border-radius: 2px; }
+    /* ── MAIN CONTENT ───────────────────────────────────────── */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px 16px 100px;
+    }
 
-    /* ── FORMS ────────────────────────────────────────────── */
+    /* ── SECTION CARDS ──────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--maroon);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+    }
+    .section-label-bar {
+      width: 3px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── FORM FIELDS ────────────────────────────────────────── */
     .field + .field { margin-top: 14px; }
-    label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
-    input[type="text"], input[type="tel"] { width: 100%; padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 14px; background: #FAFAFA; outline: none; transition: border-color 0.2s; }
-    input:focus { border-color: var(--maroon); background: #fff; }
-    input.has-error { border-color: #EF4444; background: #FEF2F2; }
-    .input-prefix-wrap { position: relative; }
-    .input-prefix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: var(--muted); pointer-events: none; }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="tel"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: #FAFAFA;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus {
+      border-color: var(--maroon);
+      box-shadow: 0 0 0 3px rgba(123,26,26,0.1);
+      background: #fff;
+    }
+    input.has-error {
+      border-color: #EF4444;
+      background: #FEF2F2;
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+    }
+    .input-prefix-wrap {
+      position: relative;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      pointer-events: none;
+    }
     .input-prefix-wrap input { padding-left: 30px; }
-    .field-hint { font-size: 11.5px; margin-top: 6px; display: flex; align-items: center; gap: 5px; }
-    .field-hint.success { color: #15803D; } .field-hint.error { color: #DC2626; } .field-hint.hidden { display: none; }
 
-    /* ── AUTOCOMPLETE ─────────────────────────────────────── */
+    .field-hint {
+      font-size: 11.5px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .field-hint.success { color: #15803D; }
+    .field-hint.error   { color: #DC2626; }
+    .field-hint.muted   { color: var(--muted); }
+    .field-hint.hidden  { display: none; }
+
+    /* ── AUTOCOMPLETE ───────────────────────────────────────── */
     .autocomplete-wrap { position: relative; }
-    #autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1.5px solid var(--border); border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .autocomplete-item { padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; border-bottom: 1px solid #F5F5F5; }
+    #autocomplete-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0; right: 0;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      overflow: hidden;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+    }
+    .autocomplete-item {
+      padding: 12px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: background 0.15s;
+      border-bottom: 1px solid #F5F5F5;
+    }
+    .autocomplete-item:last-child { border-bottom: none; }
     .autocomplete-item:hover { background: var(--maroon-soft); }
-    .item-name { font-size: 13px; font-weight: 600; }
-    .item-meta { font-size: 10px; background: #F3F4F6; color: var(--muted); padding: 2px 6px; border-radius: 4px; }
+    .autocomplete-item-name { font-size: 13px; font-weight: 600; }
+    .autocomplete-item-meta {
+      font-size: 10px;
+      background: #F3F4F6;
+      color: var(--muted);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
 
-    /* ── ORG GRID ─────────────────────────────────────────── */
-    .counter-pill { display: inline-flex; background: var(--maroon-soft); color: var(--maroon); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; }
-    #orgsGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    @media (min-width: 400px) { #orgsGrid { grid-template-columns: repeat(3, 1fr); } }
+    /* ── ORG GRID ───────────────────────────────────────────── */
+    #orgs-info {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .counter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--maroon-soft);
+      color: var(--maroon);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    #orgsGrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    @media (min-width: 400px) {
+      #orgsGrid { grid-template-columns: repeat(3, 1fr); }
+    }
 
-    .org-card { border: 2px solid var(--border); border-radius: 14px; padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.2s; background: #FAFAFA; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; }
-    .org-card img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px; }
-    .org-card-name { font-size: 12px; font-weight: 700; color: var(--text); }
-    
-    .org-card:hover:not(.selected) { border-color: #C4A0A0; background: white; }
-    .org-card.selected { border-color: var(--maroon); background: var(--maroon-soft); }
-    .org-card.selected .org-card-name { color: var(--maroon); }
-    
-    .check-circle { position: absolute; top: 6px; right: 6px; width: 18px; height: 18px; border-radius: 50%; background: var(--maroon); color: white; display: flex; align-items: center; justify-content: center; opacity: 0; font-size: 10px; transition: opacity 0.2s; }
+    .org-card {
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #FAFAFA;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-height: 110px;
+      justify-content: center;
+    }
+    .org-card:active { transform: scale(0.97); }
+    .org-card:hover:not(.selected):not(.disabled) {
+      border-color: #C4A0A0;
+      background: white;
+      box-shadow: 0 2px 12px rgba(123,26,26,0.1);
+    }
+    .org-card.selected {
+      border-color: var(--maroon);
+      background: var(--maroon-soft);
+      box-shadow: 0 4px 16px rgba(123,26,26,0.2);
+    }
+    .org-card img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .org-card-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .org-card .badge-selected {
+      font-size: 9px;
+      font-weight: 700;
+      background: var(--maroon);
+      color: white;
+      padding: 1px 8px;
+      border-radius: 10px;
+      display: none;
+    }
+    .org-card.selected .badge-selected { display: inline-block; }
+    .org-card.selected .org-card-name  { color: var(--maroon); }
+
+    .check-circle {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--maroon);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
     .org-card.selected .check-circle { opacity: 1; }
 
-    #conflictMsg { font-size: 11px; color: #DC2626; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 8px; margin-top: 10px; display: none; text-align: center; }
+    /* Skeleton */
+    .skeleton-card {
+      border-radius: 14px;
+      background: linear-gradient(90deg, #F0E8E8 25%, #E8DCDC 50%, #F0E8E8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      min-height: 110px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    /* ── SUBMIT BAR & OVERLAYS ────────────────────────────── */
-    .submit-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(247,240,238,0.95); backdrop-filter: blur(8px); padding: 12px 16px; border-top: 1px solid var(--border); z-index: 50; }
-    #btnSubmit { width: 100%; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, var(--maroon), var(--maroon-mid)); color: white; border: none; border-radius: 12px; padding: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(123,26,26,0.3); }
-    #btnSubmit:disabled { opacity: 0.6; cursor: not-allowed; }
+    #conflictMsg {
+      font-size: 12px;
+      color: #DC2626;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
 
-    #successOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+    /* ── SUBMIT BUTTON ──────────────────────────────────────── */
+    .submit-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(247,240,238,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 12px 16px env(safe-area-inset-bottom, 12px);
+      border-top: 1px solid var(--border);
+      z-index: 50;
+    }
+    #btnSubmit {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-mid) 100%);
+      color: white;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(123,26,26,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    #btnSubmit:active { transform: scale(0.98); }
+    #btnSubmit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── SUCCESS OVERLAY ────────────────────────────────────── */
+    #successOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
     #successOverlay.show { display: flex; }
-    .success-box { background: white; border-radius: 20px; padding: 30px 20px; text-align: center; width: 100%; max-width: 320px; }
-    .success-icon { width: 56px; height: 56px; background: #DCFCE7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 24px; }
-    .success-box h3 { font-size: 18px; color: var(--maroon); margin-bottom: 8px; }
-    .success-box p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-    .success-box button { background: var(--maroon); color: white; border: none; border-radius: 10px; padding: 10px 24px; font-weight: 700; cursor: pointer; }
+    .success-box {
+      background: white;
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+      animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .success-icon {
+      width: 64px; height: 64px;
+      background: #DCFCE7;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px;
+    }
+    .success-box h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--maroon);
+      margin-bottom: 8px;
+    }
+    .success-box p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .success-box button {
+      background: var(--maroon);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 28px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-    .shake { animation: shake 0.3s ease; }
-    @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+    /* ── CLOSED STATE ───────────────────────────────────────── */
+    #closedState {
+      padding: 60px 20px;
+      text-align: center;
+      display: none;
+    }
+    #closedState .closed-icon { font-size: 52px; margin-bottom: 16px; }
+    #closedState h2 { font-size: 22px; font-weight: 800; color: var(--maroon); margin-bottom: 8px; }
+    #closedState p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── SPINNER ────────────────────────────────────────────── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.8s linear infinite; }
+
+    /* ── SHAKE ANIMATION ────────────────────────────────────── */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-5px); }
+      40%,80%  { transform: translateX(5px); }
+    }
+    .shake { animation: shake 0.35s ease; }
   </style>
 </head>
 <body>
@@ -121,227 +484,430 @@
   </div>
 
   <div class="site-header">
-    <img src="logo_sma_abbs_surakarta.png" alt="Logo SMA ABBS" class="header-logo" onerror="this.style.display='none'">
+    <img src="logo_sma_abbs_surakarta.png" alt="Logo SMA ABBS" class="header-logo"
+         style="margin: 0 auto 10px; display: block;"
+         onerror="this.style.display='none';">
     <h1>Pendaftaran Organisasi</h1>
     <span class="badge-tahun">SMA ABBS Surakarta</span>
   </div>
 
-  <div class="container" id="mainForm">
+  <div class="container" style="padding-bottom: 0; padding-top: 0; max-width: 600px;">
     <div id="timelineBanner"></div>
+  </div>
+
+  <div class="container">
+    <div id="closedState">
+      <div class="closed-icon">🔒</div>
+      <h2 id="closedTitle">Pendaftaran Ditutup</h2>
+      <p id="closedDesc">Periode pendaftaran organisasi belum dimulai atau sudah berakhir. Pantau pengumuman dari sekolah untuk informasi lebih lanjut.</p>
+    </div>
+  </div>
+
+  <div class="container" id="mainForm">
 
     <div class="card">
-      <div class="section-label"><span class="section-label-bar"></span>Data Diri Siswa</div>
+      <div class="section-label">
+        <span class="section-label-bar"></span>
+        Data Diri Siswa
+      </div>
+
       <div class="field">
         <label for="nama">Nama Lengkap</label>
         <div class="autocomplete-wrap">
           <input type="text" id="nama" placeholder="Ketik nama untuk mencari…" autocomplete="off">
           <div id="autocomplete-list"></div>
         </div>
-        <p id="infoSiswa" class="field-hint success hidden">✅ <span id="infoSiswaText"></span></p>
+        <p id="infoSiswa" class="field-hint success hidden">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#15803D"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="infoSiswaText"></span>
+        </p>
       </div>
+
       <div class="field">
-        <label for="wa">Nomor WhatsApp Siswa</label>
-        <div class="input-prefix-wrap"><span class="input-prefix">+</span><input type="tel" id="wa" placeholder="628xxxxxxxxxx"></div>
-        <p id="waError" class="field-hint error hidden">Harus diawali kode negara 62.</p>
+        <label for="wa">Nomor WhatsApp Siswa Aktif</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">+</span>
+          <input type="tel" id="wa" placeholder="628xxxxxxxxxx" inputmode="numeric">
+        </div>
+        <p id="waError" class="field-hint error hidden">Nomor harus dimulai dengan kode negara 62.</p>
       </div>
     </div>
 
     <div class="card">
-      <div class="section-label"><span class="section-label-bar"></span>Data Orang Tua / Wali</div>
+      <div class="section-label">
+        <span class="section-label-bar"></span>
+        Data Orang Tua / Wali
+      </div>
+
       <div class="field">
         <label for="namaOrtu">Nama Orang Tua / Wali</label>
-        <input type="text" id="namaOrtu" placeholder="Nama lengkap">
+        <input type="text" id="namaOrtu" placeholder="Otomatis kapital di awal kata">
       </div>
+
       <div class="field">
         <label for="waOrtu">Nomor WhatsApp Orang Tua</label>
-        <div class="input-prefix-wrap"><span class="input-prefix">+</span><input type="tel" id="waOrtu" placeholder="628xxxxxxxxxx"></div>
-        <p id="waOrtuError" class="field-hint error hidden">Harus diawali kode negara 62.</p>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">+</span>
+          <input type="tel" id="waOrtu" placeholder="628xxxxxxxxxx" inputmode="numeric">
+        </div>
+        <p id="waOrtuError" class="field-hint error hidden">Nomor harus dimulai dengan kode negara 62.</p>
       </div>
     </div>
 
-    <div class="card" style="margin-bottom: 30px;">
-      <div class="section-label"><span class="section-label-bar"></span>Pilih Organisasi</div>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:12px;">Pilih maksimal 2. Organisasi non-irisan tidak bisa dipilih bersamaan.</p>
-      <div class="counter-pill"><span id="counterPilihan">0 / 2 Dipilih</span></div>
-      
-      <div id="orgsGrid"></div>
-      <div id="conflictMsg">⚠️ Organisasi tersebut tidak bisa diiriskan.</div>
-    </div>
-  </div>
+    <div class="card">
+      <div class="section-label">
+        <span class="section-label-bar"></span>
+        Pilih Organisasi
+      </div>
+      <p id="orgs-info">Pilih maksimal 2. Beberapa organisasi tidak bisa dipilih secara bersamaan.</p>
+      <div class="counter-pill">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.854 4.75L13 5.368L10 8.29L10.708 12.42L7 10.47L3.292 12.42L4 8.29L1 5.368L5.146 4.75L7 1Z" fill="currentColor"/></svg>
+        <span id="counterPilihan">0 / 2 Dipilih</span>
+      </div>
 
-  <div class="submit-bar">
-    <button id="btnSubmit">Kirim Pendaftaran</button>
+      <div id="orgsLoader" class="grid gap-3" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+
+      <div id="orgsGrid" style="display:none;"></div>
+      <div id="conflictMsg">
+        ⚠️ Dua organisasi tersebut tidak bisa dipilih bersamaan.
+      </div>
+    </div>
+
+  </div><div class="submit-bar">
+    <button id="btnSubmit">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1L11.245 6.09L17 6.927L13 10.818L13.99 16.55L9 13.973L4.01 16.55L5 10.818L1 6.927L6.755 6.09L9 1Z" fill="white"/></svg>
+      Kirim Pendaftaran
+    </button>
   </div>
 
   <div id="successOverlay">
     <div class="success-box">
       <div class="success-icon">✅</div>
-      <h3>Berhasil!</h3>
-      <p>Data pendaftaranmu sudah tersimpan.</p>
-      <button onclick="resetForm()">Tutup</button>
+      <h3>Pendaftaran Berhasil!</h3>
+      <p>Data pendaftaranmu sudah masuk ke dalam sistem.</p>
+      <button onclick="resetForm()">Daftar Ulang</button>
     </div>
   </div>
 
 <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbxEJwQ7xU2oToumwJs7l3eS1xqS_B8Y-zYeYj-GAQmHTePEtEBfprbiH4YmEtzTYFrp/exec'; 
+  // ── KONFIGURASI ────────────────────────────────────
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxEJwQ7xU2oToumwJs7l3eS1xqS_B8Y-zYeYj-GAQmHTePEtEBfprbiH4YmEtzTYFrp/exec';
 
-  let daftarSiswa = [], daftarOrganisasi = [], selectedOrgs = [];
-  let formEnabled = false, currentKelas = ''; // Menyimpan kelas siswa yang dipilih
+  let daftarSiswa = [];
+  let daftarOrganisasi = [];
+  let selectedOrgs = [];
+  
+  let formEnabled = false;
+  let currentKelas = ''; 
+  let isValidSelection = false; // Flag khusus agar pendaftaran bisa diproses walau kelas/NIS MPLS kosong
 
+  // ── INIT & FETCH ───────────────────────────────────
   window.addEventListener('DOMContentLoaded', fetchData);
 
   async function fetchData() {
     try {
       const res = await fetch(API_URL + '?action=getData');
       const data = await res.json();
-      daftarSiswa = data.siswa || [];
-      daftarOrganisasi = data.orgs || [];
-      
+
+      daftarSiswa      = data.siswa  || [];
+      daftarOrganisasi = data.orgs   || [];
+      const config     = data.config || {};
+
       // Matikan Preloader
       const loader = document.getElementById('preloader');
       loader.style.opacity = '0';
       setTimeout(() => loader.style.visibility = 'hidden', 500);
 
-      checkTimeline(data.config || {});
+      checkTimeline(config);
       renderOrgs();
+
     } catch (err) {
-      document.querySelector('.preloader-text').textContent = "Gagal memuat. Periksa internet.";
+      console.error(err);
+      document.querySelector('.preloader-text').textContent = 'Gagal memuat. Silakan refresh.';
     }
   }
 
+  // ── TIMELINE CHECK ───────────────────────────────
   function checkTimeline(config) {
-    const now = new Date(), banner = document.getElementById('timelineBanner');
-    const fmt = d => d ? new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short'}) : '';
-    const sX = config.BatasAwalX ? new Date(config.BatasAwalX) : null, eX = config.BatasAkhirX ? new Date(config.BatasAkhirX) : null;
-    const sXI = config.BatasAwalXI ? new Date(config.BatasAwalXI) : null, eXI = config.BatasAkhirXI ? new Date(config.BatasAkhirXI) : null;
+    const now    = new Date();
+    const banner = document.getElementById('timelineBanner');
+    const fmt    = d => d ? new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}) : '?';
 
-    const xOn = sX && eX && now >= sX && now <= eX, xiOn = sXI && eXI && now >= sXI && now <= eXI;
+    const startX   = config.BatasAwalX   ? new Date(config.BatasAwalX)   : null;
+    const endX     = config.BatasAkhirX  ? new Date(config.BatasAkhirX)  : null;
+    const startXI  = config.BatasAwalXI  ? new Date(config.BatasAwalXI)  : null;
+    const endXI    = config.BatasAkhirXI ? new Date(config.BatasAkhirXI) : null;
+
+    const xActive  = startX  && endX  && now >= startX  && now <= endX;
+    const xiActive = startXI && endXI && now >= startXI && now <= endXI;
+
     banner.style.display = 'flex';
 
-    if (xOn || xiOn) {
+    if (xActive || xiActive) {
       formEnabled = true;
-      banner.className = 'info'; banner.textContent = `Pendaftaran Buka: Kelas ${xOn?'X':''}${xOn&&xiOn?' & ':''}${xiOn?'XI':''}`;
+      banner.className = 'info';
+      banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#3B82F6"/><path d="M8 4v4l2.5 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Pendaftaran dibuka${xActive && xiActive ? '' : xActive ? ' untuk Kelas X' : ' untuk Kelas XI'}
+        s.d. ${fmt(xActive ? endX : endXI)}`;
+      document.getElementById('closedState').style.display = 'none';
+      document.getElementById('mainForm').style.display = '';
     } else {
+      const allFuture = [startX, startXI].filter(Boolean).every(d => d > now);
       formEnabled = false;
       document.getElementById('btnSubmit').disabled = true;
-      banner.className = 'error'; banner.textContent = `Pendaftaran saat ini ditutup.`;
+
+      if (allFuture) {
+        const nearestStart = [startX, startXI].filter(Boolean).sort((a,b)=>a-b)[0];
+        banner.className = 'warn';
+        banner.innerHTML = `⏳ Pendaftaran belum dibuka. Mulai ${fmt(nearestStart)}.`;
+        closedUI('Pendaftaran Belum Dibuka', `Pendaftaran akan dibuka mulai ${fmt(nearestStart)}. Pantau pengumuman dari sekolah.`);
+      } else {
+        banner.className = 'error';
+        banner.innerHTML = `🔒 Periode pendaftaran telah ditutup.`;
+        closedUI('Pendaftaran Telah Ditutup', 'Periode pendaftaran organisasi tahun ini sudah berakhir.');
+      }
     }
   }
 
-  function renderOrgs() {
-    const grid = document.getElementById('orgsGrid'); grid.innerHTML = '';
-    daftarOrganisasi.forEach((org, idx) => {
-      const imgSrc = org.logo ? `https://drive.google.com/thumbnail?id=${org.logo}&sz=w200` : '';
-      const card = document.createElement('div'); card.className = 'org-card';
-      card.innerHTML = `
-        <div class="check-circle">✓</div>
-        ${imgSrc ? `<img src="${imgSrc}">` : `<div style="font-size:24px;margin-bottom:8px">🏛️</div>`}
-        <div class="org-card-name">${org.nama}</div>
-      `;
-      card.onclick = () => toggleOrg(org);
-      grid.appendChild(card);
-    });
+  function closedUI(title, desc) {
+    document.getElementById('mainForm').style.display = 'none';
+    const s = document.getElementById('closedState');
+    s.style.display = 'block';
+    document.getElementById('closedTitle').textContent = title;
+    document.getElementById('closedDesc').textContent  = desc;
   }
 
-  function toggleOrg(org) {
+  // ── RENDER ORGS ──────────────────────────────────
+  function renderOrgs() {
+    const loader = document.getElementById('orgsLoader');
+    const grid   = document.getElementById('orgsGrid');
+    loader.style.display = 'none';
+    grid.style.display = 'grid';
+    grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    grid.style.gap = '10px';
+    grid.innerHTML = '';
+
+    daftarOrganisasi.forEach((org, idx) => {
+      const imgSrc  = org.logo ? `https://drive.google.com/thumbnail?id=${org.logo}&sz=w200` : '';
+
+      const card = document.createElement('div');
+      card.className = 'org-card';
+      card.dataset.index = idx;
+      
+      // Tulisan/Badge Utama/Bebas tidak lagi dirender untuk mencegah diskriminasi
+      card.innerHTML = `
+        <div class="check-circle">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2 5L4.5 7.5L8.5 2.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        ${imgSrc
+          ? `<img src="${imgSrc}" alt="${org.nama}" onerror="this.style.display='none'">`
+          : `<div style="width:44px;height:44px;background:#F3EDE8;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;">🏛️</div>`
+        }
+        <div class="org-card-name">${org.nama}</div>
+        <span class="badge-selected">✓ Dipilih</span>
+      `;
+      card.addEventListener('click', () => toggleOrg(idx));
+      grid.appendChild(card);
+    });
+
+    if (window.innerWidth >= 400) grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+  }
+
+  function toggleOrg(idx) {
     if (!formEnabled) return;
-    const msg = document.getElementById('conflictMsg');
-    
-    if (selectedOrgs.includes(org.nama)) {
-      selectedOrgs = selectedOrgs.filter(n => n !== org.nama);
+    const org   = daftarOrganisasi[idx];
+    const nama  = org.nama;
+    const conflict = document.getElementById('conflictMsg');
+
+    if (selectedOrgs.includes(nama)) {
+      selectedOrgs = selectedOrgs.filter(n => n !== nama);
     } else {
       if (selectedOrgs.length >= 2) return;
-      const isUtama = (org.kategori || '').toLowerCase() === 'utama';
-      const adaUtamaLain = selectedOrgs.some(n => {
+
+      // Konflik dicek di latar belakang menggunakan properti "kategori"
+      const isUtama       = (org.kategori || '').toLowerCase() === 'utama';
+      const existingUtama = selectedOrgs.some(n => {
         const o = daftarOrganisasi.find(x => x.nama === n);
         return o && (o.kategori || '').toLowerCase() === 'utama';
       });
 
-      if (isUtama && adaUtamaLain) {
-        msg.style.display = 'block';
-        setTimeout(() => msg.style.display = 'none', 3000);
+      if (isUtama && existingUtama) {
+        conflict.style.display = 'flex';
+        const cards = document.querySelectorAll('.org-card');
+        cards[idx].classList.add('shake');
+        setTimeout(() => cards[idx].classList.remove('shake'), 400);
         return;
       }
-      selectedOrgs.push(org.nama);
+      selectedOrgs.push(nama);
     }
+
+    conflict.style.display = 'none';
+    updateOrgUI();
     document.getElementById('counterPilihan').textContent = `${selectedOrgs.length} / 2 Dipilih`;
-    
+  }
+
+  function updateOrgUI() {
     document.querySelectorAll('.org-card').forEach((card, i) => {
-      card.classList.toggle('selected', selectedOrgs.includes(daftarOrganisasi[i].nama));
+      const nama = daftarOrganisasi[i].nama;
+      card.classList.toggle('selected', selectedOrgs.includes(nama));
     });
   }
 
-  // Autocomplete
-  const inpNama = document.getElementById('nama'), listEl = document.getElementById('autocomplete-list');
-  
-  inpNama.oninput = function() {
-    const v = this.value.toLowerCase(); 
+  // ── AUTOCOMPLETE ─────────────────────────────────
+  const inpNama = document.getElementById('nama');
+  const listEl  = document.getElementById('autocomplete-list');
+
+  inpNama.addEventListener('input', function() {
+    const val = this.value.trim().toLowerCase();
     listEl.innerHTML = '';
     
-    // RESET variabel kelas dan sembunyikan info sukses jika siswa mengetik ulang
-    currentKelas = ''; 
+    // Wajib reset nilai agar tidak bisa di-bypass dengan mengetik acak
+    currentKelas = '';
+    isValidSelection = false;
     document.getElementById('infoSiswa').classList.add('hidden');
-    
-    if(!v) { listEl.style.display='none'; return; }
-    
-    // Filter saran nama (maksimal tampil 5)
-    const m = daftarSiswa.filter(s => s.nama.toLowerCase().includes(v)).slice(0, 5);
-    if(!m.length) { listEl.style.display='none'; return; }
-    
-    listEl.style.display='block';
-    m.forEach(s => {
-      const d = document.createElement('div'); 
-      d.className = 'autocomplete-item';
-      d.innerHTML = `<span class="item-name">${s.nama}</span><span class="item-meta">${s.kelas}</span>`;
+
+    if (!val) { listEl.style.display = 'none'; return; }
+
+    const matches = daftarSiswa.filter(s => s.nama.toLowerCase().includes(val)).slice(0, 5);
+    if (!matches.length) { listEl.style.display = 'none'; return; }
+
+    listEl.style.display = 'block';
+    matches.forEach(m => {
+      const item = document.createElement('div');
+      item.className = 'autocomplete-item';
       
-      // Gunakan onclick agar kompatibel 100% di HP maupun Laptop
-      d.onclick = () => {
-        inpNama.value = s.nama; 
-        currentKelas = s.kelas; // Simpan data kelas
-        document.getElementById('infoSiswaText').textContent = `Ditemukan: ${s.kelas} - ${s.nis||''}`;
+      // Jika data kosong di Sheet, tampilkan teks default
+      const displayKelas = m.kelas ? m.kelas : 'MPLS';
+      const displayNis = m.nis ? m.nis : '-';
+
+      item.innerHTML = `
+        <span class="autocomplete-item-name">${m.nama}</span>
+        <span class="autocomplete-item-meta">${displayKelas}</span>
+      `;
+      
+      item.onclick = (e) => {
+        e.preventDefault();
+        inpNama.value = m.nama;
+        currentKelas = m.kelas || ''; 
+        isValidSelection = true; // Tandai valid karena user memilih langsung dari data Sheet
+        
+        document.getElementById('infoSiswaText').textContent = `Terverifikasi: ${displayKelas} - ${displayNis}`;
         document.getElementById('infoSiswa').classList.remove('hidden');
-        listEl.style.display='none';
+        listEl.style.display = 'none';
       };
-      listEl.appendChild(d);
+      listEl.appendChild(item);
     });
-  };
+  });
 
-  // Sembunyikan dropdown jika user mengeklik di luar area input
-  document.onclick = (e) => { 
-    if(!e.target.closest('.autocomplete-wrap')) listEl.style.display='none'; 
-  };
-  document.getElementById('namaOrtu').oninput = function() { this.value = this.value.replace(/\b\w/g, c => c.toUpperCase()); };
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.autocomplete-wrap')) listEl.style.display = 'none';
+  });
+
+  // ── FORM FORMATTING ──────────────────────────────
+  document.getElementById('namaOrtu').addEventListener('input', function() {
+    const pos = this.selectionStart;
+    this.value = this.value.replace(/\b\w/g, c => c.toUpperCase());
+    this.setSelectionRange(pos, pos);
+  });
+
   function setupWA(id, errId) {
-    const el = document.getElementById(id), err = document.getElementById(errId);
-    el.onblur = () => {
-      let v = el.value.replace(/\D/g, ''); if(v.startsWith('0')) v = '62'+v.slice(1); el.value = v;
-      err.classList.toggle('hidden', !(v && !v.startsWith('62'))); el.classList.toggle('has-error', v && !v.startsWith('62'));
-    };
+    const el  = document.getElementById(id);
+    const err = document.getElementById(errId);
+    el.addEventListener('blur', () => {
+      let val = el.value.replace(/\D/g, '');
+      if (val.startsWith('0')) val = '62' + val.slice(1);
+      el.value = val;
+      const bad = val && !val.startsWith('62');
+      err.classList.toggle('hidden', !bad);
+      el.classList.toggle('has-error', bad);
+    });
+    el.addEventListener('focus', () => { err.classList.add('hidden'); el.classList.remove('has-error'); });
   }
-  setupWA('wa', 'waError'); setupWA('waOrtu', 'waOrtuError');
+  setupWA('wa', 'waError');
+  setupWA('waOrtu', 'waOrtuError');
 
-  document.getElementById('btnSubmit').onclick = async function() {
-    if(!formEnabled) return;
-    const payload = {
-      nama: inpNama.value.trim(), kelas: currentKelas,
-      wa: document.getElementById('wa').value.trim(),
-      namaOrtu: document.getElementById('namaOrtu').value.trim(), waOrtu: document.getElementById('waOrtu').value.trim(),
-      pilihan1: selectedOrgs[0] || '', pilihan2: selectedOrgs[1] || '-'
-    };
+  // ── SUBMIT ───────────────────────────────────────
+  document.getElementById('btnSubmit').addEventListener('click', async function() {
+    if (!formEnabled) return;
 
-    if(!payload.nama || !payload.kelas) return alert("Pilih nama dari saran yang muncul saat diketik.");
-    if(!payload.wa || !payload.waOrtu) return alert("Lengkapi data WhatsApp.");
-    if(!selectedOrgs.length) return alert("Pilih minimal 1 organisasi.");
+    const nama     = document.getElementById('nama').value.trim();
+    const wa       = document.getElementById('wa').value.trim();
+    const namaOrtu = document.getElementById('namaOrtu').value.trim();
+    const waOrtu   = document.getElementById('waOrtu').value.trim();
 
-    this.disabled = true; this.innerHTML = "Mengirim...";
+    // Validasi Form
+    let firstErr = null;
+    const required = [
+      { id: 'nama',     val: nama },
+      { id: 'wa',       val: wa },
+      { id: 'namaOrtu', val: namaOrtu },
+      { id: 'waOrtu',   val: waOrtu },
+    ];
+    required.forEach(f => {
+      if (!f.val) {
+        const el = document.getElementById(f.id);
+        el.classList.add('has-error', 'shake');
+        setTimeout(() => el.classList.remove('shake'), 400);
+        if (!firstErr) firstErr = el;
+      }
+    });
+
+    if (firstErr) { firstErr.focus(); return; }
+    
+    // Cek apakah siswa benar-benar memilih nama dari daftar
+    if (!isValidSelection) {
+      alert("Pilih nama dari saran dropdown yang muncul saat Anda mengetik.");
+      const el = document.getElementById('nama');
+      el.classList.add('has-error', 'shake');
+      setTimeout(() => el.classList.remove('shake'), 400);
+      return;
+    }
+
+    if (!wa.startsWith('62') || !waOrtu.startsWith('62')) {
+      alert('Nomor WhatsApp harus diawali kode negara 62.'); return;
+    }
+    if (selectedOrgs.length === 0) {
+      document.querySelector('.card:last-of-type').scrollIntoView({ behavior: 'smooth' });
+      alert('Pilih minimal 1 organisasi.'); return;
+    }
+
+    const btn = document.getElementById('btnSubmit');
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="spin" width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M9 1.5A7.5 7.5 0 1 1 1.5 9" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </svg> Mengirim…`;
+
     try {
-      await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+      await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          nama: nama, 
+          kelas: currentKelas,
+          wa: wa, 
+          namaOrtu: namaOrtu, 
+          waOrtu: waOrtu,
+          pilihan1: selectedOrgs[0] || '',
+          pilihan2: selectedOrgs[1] || '-'
+        })
+      });
       document.getElementById('successOverlay').classList.add('show');
-    } catch(e) { document.getElementById('successOverlay').classList.add('show'); }
-    this.disabled = false; this.innerHTML = "Kirim Pendaftaran";
-  };
+    } catch (e) {
+      document.getElementById('successOverlay').classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1L11.245 6.09L17 6.927L13 10.818L13.99 16.55L9 13.973L4.01 16.55L5 10.818L1 6.927L6.755 6.09L9 1Z" fill="white"/></svg> Kirim Pendaftaran`;
+    }
+  });
 
-  function resetForm() { location.reload(); }
+  function resetForm() {
+    window.location.reload();
+  }
 </script>
 </body>
 </html>
