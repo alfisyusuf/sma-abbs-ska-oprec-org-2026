@@ -153,7 +153,7 @@
         const div = document.createElement('div');
         const isUtama = org.kategori.toLowerCase() === 'utama';
         // Konversi ID Drive menjadi URL Gambar langsung
-        const imgSrc = org.logo ? `https://drive.google.com/uc?export=view&id=${org.logo}` : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlMGUwZTAiLz48L3N2Zz4='; // Placeholder abu-abu jika kosong
+        const imgSrc = org.logo ? `https://drive.google.com/thumbnail?id=${org.logo}&sz=w200` : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlMGUwZTAiLz48L3N2Zz4=';
 
         div.className = `group p-4 rounded-xl border-2 border-transparent bg-white/70 text-center cursor-pointer transition-all duration-300 relative shadow-sm hover:shadow-md flex flex-col items-center justify-center min-h-[110px]`;
         div.innerHTML = `
