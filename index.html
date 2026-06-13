@@ -394,7 +394,7 @@
       </div>
 
       <button class="btn-close" onclick="closeSafely()">Tutup Halaman</button>
-      <button onclick="window.location.reload();" style="width:100%; background:transparent; color:var(--muted); border:none; padding-top:16px; font-weight:600; cursor:pointer;">Keluar / Ganti Akun</button>
+      <button onclick="resetForm()" style="width:100%; background:transparent; color:var(--muted); border:none; padding-top:16px; font-weight:600; cursor:pointer;">Keluar / Ganti Akun</button>
     </div>
   </div>
 
@@ -725,6 +725,41 @@
       <h3 style="font-size:20px; font-weight:bold; margin-bottom:10px">Selesai</h3>
       <p style="font-size:14px; opacity:0.8">Anda dapat menutup halaman browser (tab) ini secara langsung.</p>
     </div>`;
+  }
+
+  function resetForm() {
+    // 1. Kosongkan semua kolom input secara paksa
+    document.getElementById('nama').value = '';
+    document.getElementById('wa').value = '';
+    document.getElementById('namaOrtu').value = '';
+    document.getElementById('waOrtu').value = '';
+
+    // 2. Reset variabel state di memori
+    currentKelas = '';
+    isValidSelection = false;
+    selectedOrgs = [];
+
+    // 3. Sembunyikan pesan info, peringatan, dan error
+    document.getElementById('infoSiswa').classList.add('hidden');
+    document.getElementById('infoEditMsg').classList.add('hidden');
+    document.getElementById('waError').classList.add('hidden');
+    document.getElementById('waOrtuError').classList.add('hidden');
+
+    // 4. Hapus garis border merah (jika sebelumnya ada error)
+    document.getElementById('nama').classList.remove('has-error');
+    document.getElementById('wa').classList.remove('has-error');
+    document.getElementById('namaOrtu').classList.remove('has-error');
+    document.getElementById('waOrtu').classList.remove('has-error');
+
+    // 5. Kembalikan teks tombol utama
+    document.getElementById('btnSubmitText').textContent = 'Kirim Pendaftaran';
+
+    // 6. Hapus centang pada kartu organisasi
+    updateOrgUI();
+
+    // 7. Tutup layar sukses dan gulir secara halus ke atas
+    document.getElementById('successOverlay').classList.remove('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
 </body>
