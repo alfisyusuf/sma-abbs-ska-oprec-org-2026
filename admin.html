@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - ABBS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F8F9FA; }
+  </style>
+</head>
+<body class="p-6">
+
+  <div id="loginModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm">
+      <h2 class="text-xl font-bold mb-4 text-[#7B1A1A]">Akses Admin</h2>
+      <input type="password" id="adminPass" class="w-full p-3 rounded-lg border border-gray-300 mb-4 outline-none focus:border-[#7B1A1A]" placeholder="Masukkan Password">
+      <button onclick="login()" class="w-full bg-[#7B1A1A] text-white p-3 rounded-lg font-bold hover:bg-[#5A1010] transition">Masuk</button>
+    </div>
+  </div>
+
+  <div id="dashboard" class="max-w-6xl mx-auto hidden">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold text-[#7B1A1A]">Rekapitulasi Pendaftar</h1>
+      <button onclick="fetchData()" class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        Refresh Data
+      </button>
+    </div>
+
+    <div id="statCards" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-gray-50 border-b border-gray-100 text-gray-600">
+            <tr>
+              <th class="p-4 font-semibold">Nama Siswa</th>
+              <th class="p-4 font-semibold">No WA</th>
+              <th class="p-4 font-semibold">Nama Ortu</th>
+              <th class="p-4 font-semibold">Pilihan 1</th>
+              <th class="p-4 font-semibold">Pilihan 2</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-gray-100">
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwMbGr_jeASgMPn2MaPalsXlGKNDbKSe17aY0Oh-FFpdg4ZuT14IRThQpch2yabhTkK/exec';
+    let currentPass = '';
+
+    function login() {
+      currentPass = document.getElementById('adminPass').value;
+      fetchData();
+    }
+
+    function fetchData() {
+      // Tombol refresh simulasi UX State
+      document.body.style.cursor = 'wait';
+      
+      // Simulasi fetch - Pada implementasi nyata, buka komentar di bawah:
+      /*
+      fetch(`${API_URL}?action=getAdmin&password=${currentPass}`)
+        .then(res => res.json())
+        .then(data => {
+          document.body.style.cursor = 'default';
+          if(data.error) return alert(data.error);
+          document.getElementById('loginModal').classList.add('hidden');
+          document.getElementById('dashboard').classList.remove('hidden');
+          renderData(data.pendaftar);
+        });
+      */
+      
+      // Mock Data Tampilan Sementara
+      document.body.style.cursor = 'default';
+      document.getElementById('loginModal').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      renderData([
+        ["12/06/2026", "Ahmad Budi", "628123", "Bapak Budi", "628999", "OSIS", "I-hub"],
+        ["12/06/2026", "Siti Aisyah", "628111", "Ibu Siti", "628888", "PMR", "-"]
+      ]);
+    }
+
+    function renderData(rows) {
+      const tbody = document.getElementById('tableBody');
+      const stats = {};
+      tbody.innerHTML = '';
+      
+      rows.forEach(row => {
+        // Hitung Statistik
+        const p1 = row[5], p2 = row[6];
+        if(p1 && p1 !== '-') stats[p1] = (stats[p1] || 0) + 1;
+        if(p2 && p2 !== '-') stats[p2] = (stats[p2] || 0) + 1;
+
+        // Render Baris
+        tbody.innerHTML += `
+          <tr class="hover:bg-gray-50 transition">
+            <td class="p-4">${row[1]}</td>
+            <td class="p-4"><a href="https://wa.me/${row[2]}" class="text-green-600 hover:underline" target="_blank">${row[2]}</a></td>
+            <td class="p-4">${row[3]}</td>
+            <td class="p-4"><span class="px-2 py-1 bg-red-50 text-red-700 rounded-md font-medium">${row[5]}</span></td>
+            <td class="p-4">${row[6] !== '-' ? `<span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md font-medium">${row[6]}</span>` : '-'}</td>
+          </tr>
+        `;
+      });
+
+      // Render Stats Cards
+      const statContainer = document.getElementById('statCards');
+      statContainer.innerHTML = '';
+      Object.keys(stats).forEach(org => {
+        statContainer.innerHTML += `
+          <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+            <p class="text-sm text-gray-500 font-semibold mb-1">${org}</p>
+            <p class="text-2xl font-bold text-[#7B1A1A]">${stats[org]} <span class="text-sm text-gray-400 font-normal">Siswa</span></p>
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
