@@ -282,7 +282,7 @@
     .btn-close { width: 100%; background: var(--maroon); color: white; border: none; border-radius: 12px; padding: 14px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
 
     /* ── CLOSED STATE ───────────────────────────────────────── */
-    #closedState { padding: 60px 20px; text-align: center; display: none; }
+    #closedState { padding: 60px 20px; text-align: center; }
     #closedState .closed-icon { font-size: 52px; margin-bottom: 16px; }
     #closedState h2 { font-size: 22px; font-weight: 800; color: var(--maroon); margin-bottom: 8px; }
     #closedState p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
@@ -434,13 +434,16 @@
   function checkTimeline(config) {
     const now    = new Date();
     const banner = document.getElementById('timelineBanner');
-    // Format tanggal: 14 Jul 2026
     const fmt    = d => d ? new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short', year:'numeric'}) : '?';
 
     const startX   = config.BatasAwalX   ? new Date(config.BatasAwalX)   : null;
-    const endX     = config.BatasAkhirX  ? new Date(config.BatasAkhirX)  : null;
+    let endX       = config.BatasAkhirX  ? new Date(config.BatasAkhirX)  : null;
     const startXI  = config.BatasAwalXI  ? new Date(config.BatasAwalXI)  : null;
-    const endXI    = config.BatasAkhirXI ? new Date(config.BatasAkhirXI) : null;
+    let endXI      = config.BatasAkhirXI ? new Date(config.BatasAkhirXI) : null;
+
+    // OTOMATISASI: Jadikan batas akhir pendaftaran sampai jam 23:59:59 malam di tanggal tersebut
+    if (endX)  endX.setHours(23, 59, 59, 999);
+    if (endXI) endXI.setHours(23, 59, 59, 999);
 
     const xActive  = startX  && endX  && now >= startX  && now <= endX;
     const xiActive = startXI && endXI && now >= startXI && now <= endXI;
@@ -451,7 +454,6 @@
       formEnabled = true;
       banner.className = 'info';
       
-      // Logika dinamis: Tampilkan kelas yang sedang aktif beserta batas akhirnya masing-masing
       let infoKelas = [];
       if (xActive)  infoKelas.push(`Kelas X (s.d. ${fmt(endX)})`);
       if (xiActive) infoKelas.push(`Kelas XI (s.d. ${fmt(endXI)})`);
@@ -466,9 +468,10 @@
       
       document.getElementById('closedContainer').style.display = 'none';
       document.getElementById('mainForm').style.display = 'block';
+      document.querySelector('.submit-bar').style.display = 'block'; // Tampilkan tombol submit
     } else {
       formEnabled = false;
-      document.getElementById('btnSubmit').disabled = true;
+      document.querySelector('.submit-bar').style.display = 'none'; // Sembunyikan tombol submit
       
       const allFuture = [startX, startXI].filter(Boolean).every(d => d > now);
       
